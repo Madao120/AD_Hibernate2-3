@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pokedex>
+<pokemon id="63">
+<nome>Garchomp</nome>
+<peso>95.0</peso>
+<misc>Pokémon tiburón dragón</misc>
+</pokemon>
+<pokemon id="64">
+<nome>Gardevoir</nome>
+<peso>48.4</peso>
+<misc>Pokémon hada psíquico</misc>
+</pokemon>
+<pokemon id="65">
+<nome>Aggron</nome>
+<peso>500.0</peso>
+<misc>Pokémon acero roca</misc>
+</pokemon>
+<pokemon id="66">
+<nome>Togekiss</nome>
+<peso>38.0</peso>
+<misc>Pokémon hada volador</misc>
+</pokemon>
+<pokemon id="67">
+<nome>Gyarados</nome>
+<peso>235.0</peso>
+<misc>Pokémon serpiente voladora</misc>
+</pokemon>
+<pokemon id="68">
+<nome>Salamence</nome>
+<peso>102.6</peso>
+<misc>Pokémon dragón volador</misc>
+</pokemon>
+<pokemon id="69">
+<nome>Metagross</nome>
+<peso>550.0</peso>
+<misc>Pokémon acero psíquico</misc>
+</pokemon>
+<pokemon id="70">
+<nome>Tyranitar</nome>
+<peso>202.8</peso>
+<misc>Pokémon roca siniestro</misc>
+</pokemon>
+<pokemon id="61">
+<nome>Raichu</nome>
+<peso>30.0</peso>
+<misc>Pokémon rata eléctrica evolucionado</misc>
+</pokemon>
+<pokemon id="62">
+<nome>Mega-Swampert</nome>
+<peso>102.0</peso>
+<misc>Pokémon agua tierra evolucionado</misc>
+</pokemon>
+</pokedex>
