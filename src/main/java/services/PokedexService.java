@@ -1,56 +1,129 @@
+
 package services;
 
 import config.HibernateConfig;
 import model.Pokedex;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class PokedexService {
 
-    public static void createPokedex(Pokedex pokedex) {
-        // Lógica para crear unha nova entrada na Pokedex
-        try(Session session = HibernateConfig.getSessionFactory().openSession()) {
-            session.beginTransaction();
-            session.save(pokedex);
-            session.getTransaction().commit();
+    public void crearPokedex(Pokedex p) {
+        Transaction transaction = null;
+
+        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            session.save(p);
+
+            transaction.commit();
+
         } catch (Exception e) {
-            System.out.println("Erro ao crear a entrada na Pokedex: " + e.getMessage());
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            System.out.println("Erro ao crear a pokedex da Pokedex: " + e.getMessage());
         }
     }
 
-    public static ArrayList<Pokedex> readPokedex() {
-        // Lógica para ler unha entrada da Pokedex
-        try(Session session = HibernateConfig.getSessionFactory().openSession()) {
-            return (ArrayList<Pokedex>) session.createQuery("from Pokedex", Pokedex.class).getResultList();
+    public Pokedex lerPokedex(Long id) {
+        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+            return session.get(Pokedex.class, id);
+
         } catch (Exception e) {
-            System.out.println("Erro ao ler a entrada da Pokedex: " + e.getMessage());
+            System.out.println("Erro ao ler a pokedex da Pokedex: " + e.getMessage());
             return null;
         }
     }
 
-    public static void updatePokedex(Pokedex pokedex) {
-        // Lógica para actualizar unha entrada da Pokedex
-        try(Session session = HibernateConfig.getSessionFactory().openSession()) {
-            session.beginTransaction();
-            session.update(pokedex);
-            session.getTransaction().commit();
+
+    public void actualizarPokedex(Long id, Pokedex pokedexUpdate) {
+        Transaction transaction = null;
+
+        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            Pokedex pokedex = session.get(Pokedex.class, id);
+
+            if (pokedex != null) {
+
+                pokedex.setNome(pokedexUpdate.getNome());
+                pokedex.setPeso(pokedexUpdate.getPeso());
+                pokedex.setMisc(pokedexUpdate.getMisc());
+
+                session.update(pokedex);
+
+                transaction.commit();
+
+            } else {
+                System.out.println("Non se atopou a pokedex co id " + id);
+                transaction.rollback();
+            }
+
         } catch (Exception e) {
-            System.out.println("Erro ao actualizar a entrada da Pokedex: " + e.getMessage());
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            System.out.println("Erro ao actualizar a pokedex da Pokedex: " + e.getMessage());
         }
     }
 
-    public static void deletePokedex(Long id) {
-        // Lógica para eliminar unha entrada da Pokedex
-        try(Session session = HibernateConfig.getSessionFactory().openSession()) {
-            session.beginTransaction();
+    public void eliminarPokedex(Long id) {
+        Transaction transaction = null;
+
+        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
             Pokedex pokedex = session.get(Pokedex.class, id);
+
             if (pokedex != null) {
                 session.delete(pokedex);
+                transaction.commit();
+
+            } else {
+                System.out.println("Non se atopou a pokedex co id " + id);
+                transaction.rollback();
             }
-            session.getTransaction().commit();
+
         } catch (Exception e) {
-            System.out.println("Erro ao eliminar a entrada da Pokedex: " + e.getMessage());
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            System.out.println("Erro ao eliminar a pokedex da Pokedex: " + e.getMessage());
+        }
+    }
+
+    public Pokedex lerPokedexPorNome(String nome) {
+        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+
+            return  session.createQuery(
+                            "FROM Pokedex WHERE nome = :nome",
+                            Pokedex.class
+                    )
+                    .setParameter("nome", nome)
+                    .uniqueResult();
+
+        } catch (Exception e) {
+            System.out.println("Erro ao ler o Adestrador polo nome: " + e.getMessage());
+            return null;
+        }
+    }
+
+
+    public List<Pokedex> listarPokedex() {
+        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+
+            List<Pokedex> pokedexList = session.createQuery(
+                    "FROM Pokedex", Pokedex.class
+            ).list();
+
+            return pokedexList;
+
+        } catch (Exception e) {
+            System.out.println("Erro ao listar pokedexs da Pokedex: " + e.getMessage());
+            return null;
         }
     }
 }
